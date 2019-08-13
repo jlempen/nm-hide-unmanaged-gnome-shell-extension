@@ -1,5 +1,5 @@
 
-const NetworkManager = imports.gi.NetworkManager;
+const NetworkManager = imports.gi.NM || imports.gi.NetworkManager;
 const Network = imports.ui.status.network;
 
 let origDeviceAdded;
