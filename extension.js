@@ -1,30 +1,30 @@
+let original_DeviceAdded;
 
-let origDeviceAdded;
-let NetworkManager;
+let NM;
 try {
-    NetworkManager = imports.gi.NM;
+    NM = imports.gi.NM;
 } catch(e) {
-    NetworkManager = imports.gi.NetworkManager;
+    NM = imports.gi.NetworkManager;
 }
+
 const Network = imports.ui.status.network;
 
-
 function enable() {
-    origDeviceAdded = Network.NMApplet.prototype._deviceAdded;
+    original_DeviceAdded = Network.NMApplet.prototype._deviceAdded;
 
-    let decoratedFunction = function (client, device, skipSyncDeviceNames) {
-        if (device.state === NetworkManager.DeviceState.UNMANAGED) {
+    let decorated_DeviceAdded = function (client, device, skipSyncDeviceNames) {
+        if (device.state === NM.DeviceState.UNMANAGED) {
             return;
         }
 
-        origDeviceAdded.call(this, client, device, skipSyncDeviceNames);
+        original_DeviceAdded.call(this, client, device, skipSyncDeviceNames);
     };
 
-	Network.NMApplet.prototype._deviceAdded = decoratedFunction;
+	Network.NMApplet.prototype._deviceAdded = decorated_DeviceAdded;
 }
 
 function disable() {
-    if (origDeviceAdded) {
-        Network.NMApplet.prototype._deviceAdded = origDeviceAdded;
+    if (original_DeviceAdded) {
+        Network.NMApplet.prototype._deviceAdded = original_DeviceAdded;
     }
 }
